@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>签到信息</title>
+</head>
+<body>
+<label for="">签到次数：{{qiandao['rowCount']}}</label><br>
+    {%for mes in qiandao['list']%}
+        {{mes['addtime']}}  {{mes['content']}}  {{mes['address']}}<br>
+    {% end %}
+</body>
+</html>

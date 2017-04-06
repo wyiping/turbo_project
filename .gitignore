@@ -1,0 +1,8 @@
+__test__
+*.pyc
+*.swp
+*.log
+*.iml
+*.tmp
+*~
+.idea/
