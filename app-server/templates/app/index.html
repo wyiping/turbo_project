@@ -5,9 +5,20 @@
     <title>hello turbo world</title>
 </head>
 <body>
-    <form action="/qiandao">
-        <label for="mobile">手机号：<input type="text" name="mobile" id="mobile"></label>
-        <input type="submit" value="查询">
-    </form>
+    {% try %}
+        {% if msg %}
+            {{msg['error']}}
+        {% end %}
+        <form action="/qiandao">
+            <label for="mobile">手机号：<input type="text" name="mobile" id="mobile"></label>
+            <input type="submit" value="查询">
+        </form>
+    {% except %}
+        <form action="/qiandao">
+            <label for="mobile">手机号：<input type="text" name="mobile" id="mobile"></label>
+            <input type="submit" value="查询">
+        </form>
+    {% end %}
+
 </body>
 </html>

@@ -14,7 +14,17 @@ class HomeHandler(BaseHandler):
     def get(self):
         self.render('index.html')
 
+
 class QiandaoHandler(BaseHandler):
     def get(self):
-        mobile = self.get_argument('mobile',None)
-        self.render('qiandao.html', qiandao=qd.find_qiandao(mobile))
+        mobile = self.get_argument('mobile', None)
+        op = self.get_argument('op', None)
+
+        if op == 'auto':
+            qd.auto(mobile)
+        else:
+            rs = qd.find_qiandao(mobile)
+            if rs.get('error'):
+                self.render('index.html', msg=rs)
+            else:
+                self.render('qiandao.html', qiandao=rs)

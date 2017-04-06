@@ -5,9 +5,38 @@
     <title>签到信息</title>
 </head>
 <body>
-<label for="">签到次数：{{qiandao['rowCount']}}</label><br>
+    <label for="">签到次数：{{qiandao['rowCount']}}</label><button id="auto">自动签到</button><br>
     {%for mes in qiandao['list']%}
         {{mes['addtime']}}  {{mes['content']}}  {{mes['address']}}<br>
     {% end %}
+    <script>
+        function createXMLHttpRequest() {
+            var xmlHttp;
+            if (window.XMLHttpRequest) {
+                xmlHttp = new XMLHttpRequest();
+                if (xmlHttp.overrideMimeType)
+                    xmlHttp.overrideMimeType('text/xml');
+            } else if (window.ActiveXObject) {
+                try {
+                    xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                    }
+                }
+            }
+            return xmlHttp;
+        }
+        document.getElementById('auto').addEventListener('click',function () {
+            xmlHttp = createXMLHttpRequest();
+            var url = "/qiandao?op=auto&mobile=15535139128";
+            xmlHttp.open("GET", url, true);// 异步处理返回
+//            xmlHttp.onreadystatechange = callback;
+            xmlHttp.setRequestHeader("Content-Type",
+                    "application/x-www-form-urlencoded;");
+            xmlHttp.send();
+        })
+    </script>
 </body>
 </html>
