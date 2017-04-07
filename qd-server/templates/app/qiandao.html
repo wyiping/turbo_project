@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>签到信息</title>
+    <script src="../static/js/jquery.js"></script>
+</head>
+<body>
+    <label for="">签到次数：{{qiandao['rowCount']}}</label><label for="">自动签到：{%if not qiandao['auto'] %} <button data-id="on" data-mobile="{{qiandao['list'][0]['mobile']}}">开启</button>{% else%}<button data-id="off" data-mobile="{{qiandao['list'][0]['mobile']}}">关闭 {% end %}</button> </label><br>
+
+
+    {%for mes in qiandao['list']%}
+        {{mes['addtime']}}  {{mes['content']}}  {{mes['address']}}<br>
+    {% end %}
+    <script>
+        $('button').click(function () {
+            $.get('/qiandao?op='+ $(this).data('id') +'&mobile='+$(this).data('mobile'),function (res) {
+                location.reload()
+            })
+        })
+    </script>
+</body>
+</html>

@@ -1,20 +1,15 @@
 # -*- coding:utf-8 -*-
 
 from db.conn import (
-    test as _test,    
-    user as _user,   
-
-    test_files as _test_files, 
-    user_files as _user_files, 
+    qiandao as _qiandao,
+    test_files as _test_files
 )
 
 MONGO_DB_MAPPING = {
     'db': {
-        'test': _test,
-        'user': _user,
+        'qiandao': _qiandao,
     },
     'db_file': {
-        'test': _test_files,
-        'user': _user_files,
+        'qiandao': _test_files,
     }
 }

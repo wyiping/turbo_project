@@ -20,11 +20,18 @@ class QiandaoHandler(BaseHandler):
         mobile = self.get_argument('mobile', None)
         op = self.get_argument('op', None)
 
-        if op == 'auto':
-            qd.auto(mobile)
+        if op == 'on':
+            qd.on(mobile)
+        elif op == 'off':
+            qd.off(mobile)
         else:
             rs = qd.find_qiandao(mobile)
             if rs.get('error'):
                 self.render('index.html', msg=rs)
             else:
                 self.render('qiandao.html', qiandao=rs)
+
+
+class AdminHandler(BaseHandler):
+    def get(self):
+        self.render('admin.html', list=qd.find_all_auto())

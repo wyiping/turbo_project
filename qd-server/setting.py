@@ -3,7 +3,7 @@ import sys
 from tornado.util import ObjectDict
 
 # server name
-SERVER_NAME = 'app-server'
+SERVER_NAME = 'qiandao-server'
 
 # server dir
 SERVER_DIR = os.path.dirname(os.path.abspath(__file__))
