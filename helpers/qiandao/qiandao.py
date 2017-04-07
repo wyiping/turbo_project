@@ -35,11 +35,7 @@ class QianDao(model.Qiandao):
         return urllib2.urlopen(urllib2.Request('http://zhaopin.0fafa.com/work/doudou/shixi/insert_qiandao.php?' + data, headers={"User-Agent": "11.5.78 rv:0.0.1 (iPhone; iPhone OS 9.3.5; zh_CN)"}))
 
     def on(self, mobile):
-        sched_Timer = (datetime.datetime.now() + datetime.timedelta(seconds=1)).strftime("%Y-%m-%d %H")
-        if sched_Timer > datetime.datetime.now().strftime("%Y-%m-%d") + " 07":
-            sched_Timer = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + " 07"
-
-        t = threading_auto(mobile, sched_Timer)
+        t = threading_auto(mobile, self.getSchedule())
         t.start()
 
     def off(self, mobile):
@@ -55,12 +51,25 @@ class QianDao(model.Qiandao):
             print item
         return data
 
+    def daemon(self):
+        for d in self.find():
+            self.remove({"mobile": d['mobile']})
+            t = threading_auto(d['mobile'], self.getSchedule())
+            t.start()
+
+    def valid_today(self):
+        pass
+
+    def getSchedule(self):
+        return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + " 07"
+
+
 class threading_auto(threading.Thread):
     db = model.Qiandao()
-    def __init__(self, mobile, sched_Timer):
+    def __init__(self, mobile, schedule):
         threading.Thread.__init__(self)
         self.mobile = mobile
-        self.sched_Timer = sched_Timer
+        self.schedule = schedule
 
     def run(self):
         threadname = threading.currentThread().getName()
@@ -69,11 +78,11 @@ class threading_auto(threading.Thread):
         flag = 0
         while signal[threadname]:
             now = datetime.datetime.now().strftime("%Y-%m-%d %H")
-            if now == self.sched_Timer:
+            if now == self.schedule:
                 flag = 1
                 QianDao().insert_qiandao(self.mobile)
             else:
                 if flag == 1:
                     flag = 0
-                    self.sched_Timer = (datetime.datetime.strptime(self.sched_Timer, "%Y-%m-%d %H") + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H")
+                    self.schedule = (datetime.datetime.strptime(self.schedule, "%Y-%m-%d %H") + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H")
             time.sleep(60 * 60)

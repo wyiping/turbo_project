@@ -6,11 +6,13 @@ import tornado.options
 import setting
 import turbo.register
 import turbo.app
+from helpers import qiandao
 
 turbo.register.register_app(setting.SERVER_NAME, setting.TURBO_APP_SETTING, setting.WEB_APPLICATION_SETTING, __file__, globals())
 
 define("port", default=8888, type=int)
 
 if __name__ == '__main__':
+    qiandao.qian_dao.daemon()
     tornado.options.parse_command_line()
     turbo.app.start(options.port)
