@@ -8,7 +8,7 @@
 <body>
     自动签到列表：<br>
     {% for i in list%}
-        {{i['mobile']}} <button data-mobile="{{i['mobile']}}">关闭</button>
+    {{i['mobile']}}签到时间： {{i['schedule']}}<button data-mobile="{{i['mobile']}}">关闭</button>
     <br>
     {% end %}
     <script>
