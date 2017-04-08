@@ -14,5 +14,6 @@ class Qiandao(Model):
     field = {
         'mobile': (basestring, ''),
         'threadname': (basestring, ''),
+        'schedule': (basestring, ''),
     }
 

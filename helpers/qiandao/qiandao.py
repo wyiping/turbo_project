@@ -15,6 +15,7 @@ class QianDao(model.Qiandao):
         if mes.get('list'):
             if self.find({'mobile': mobile}).count() > 0:
                 mes['auto'] = True
+                mes['schedule'] = self.find_one({'mobile':mobile})['schedule']
             else:
                 mes['auto'] = False
             # while page < pagecount:
@@ -79,7 +80,7 @@ class threading_auto(threading.Thread):
 
     def run(self):
         threadname = threading.currentThread().getName()
-        self.db.insert({'mobile': self.mobile, 'threadname': threadname})
+        self.db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': self.schedule})
         signal[threadname] = True
         flag = 0
         while signal[threadname]:
@@ -90,5 +91,7 @@ class threading_auto(threading.Thread):
             else:
                 if flag == 1:
                     flag = 0
-                    self.schedule = getSchedule()
+                    next_schedule = getSchedule()
+                    self.db.update({'mobile': self.mobile},{'$set':{'schedule': next_schedule}})
+                    self.schedule = next_schedule
             time.sleep(60 * 60)
