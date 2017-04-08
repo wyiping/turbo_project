@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from models.qiandao import model
-import json, urllib, urllib2, datetime, threading, time
+import json, urllib, urllib2, datetime, threading, time, random
 MODEL_SLOTS = ['QianDao']
 
 signal = {}
@@ -17,11 +17,11 @@ class QianDao(model.Qiandao):
                 mes['auto'] = True
             else:
                 mes['auto'] = False
-            while page < pagecount:
-                page = page + 1
-                res = self.query(mobile, str(page))
-                for m in res['list']:
-                    mes['list'].append(m)
+            # while page < pagecount:
+            #     page = page + 1
+            #     res = self.query(mobile, str(page))
+            #     for m in res['list']:
+            #         mes['list'].append(m)
             return mes
         else:
             return {'error': '号码有误'}
@@ -35,7 +35,7 @@ class QianDao(model.Qiandao):
         return urllib2.urlopen(urllib2.Request('http://zhaopin.0fafa.com/work/doudou/shixi/insert_qiandao.php?' + data, headers={"User-Agent": "11.5.78 rv:0.0.1 (iPhone; iPhone OS 9.3.5; zh_CN)"}))
 
     def on(self, mobile):
-        t = threading_auto(mobile, self.getSchedule())
+        t = threading_auto(mobile, getSchedule())
         t.start()
 
     def off(self, mobile):
@@ -54,14 +54,20 @@ class QianDao(model.Qiandao):
     def daemon(self):
         for d in self.find():
             self.remove({"mobile": d['mobile']})
-            t = threading_auto(d['mobile'], self.getSchedule())
+            t = threading_auto(d['mobile'], getSchedule())
             t.start()
 
     def valid_today(self):
         pass
 
-    def getSchedule(self):
-        return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + " 07"
+
+def getSchedule():
+    rnum = random.randint(7, 12)
+    if rnum < 10:
+        H = ' 0' + str(rnum)
+    else:
+        H = ' ' + str(rnum)
+    return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + H
 
 
 class threading_auto(threading.Thread):
@@ -84,5 +90,5 @@ class threading_auto(threading.Thread):
             else:
                 if flag == 1:
                     flag = 0
-                    self.schedule = (datetime.datetime.strptime(self.schedule, "%Y-%m-%d %H") + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H")
+                    self.schedule = getSchedule()
             time.sleep(60 * 60)
