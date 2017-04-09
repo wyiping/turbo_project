@@ -20,7 +20,7 @@ class HomeHandler(BaseHandler):
             if qd.chaxun(mobile):
                 self._data = 'success'
             else:
-                self.response_error('error')
+                self.response_error('手机号错误！')
 
 
 class QiandaoHandler(BaseHandler):
