@@ -6,8 +6,21 @@ MODEL_SLOTS = ['QianDao']
 
 signal = {}
 
-class QianDao(model.Qiandao):
+def getSchedule():
+    rnum = random.randint(7, 12)
+    if rnum < 10:
+        H = ' 0' + str(rnum)
+    else:
+        H = ' ' + str(rnum)
+    return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + H
 
+def valid_today(mobile):
+    if QianDao().query(mobile)['list'][0]['addtime'][0:10] != datetime.datetime.now().strftime("%Y-%m-%d"):
+        return False
+    else:
+        return True
+
+class QianDao(model.Qiandao):
     def find_qiandao(self, mobile):
         page = 1
         mes = self.query(mobile)
@@ -15,7 +28,7 @@ class QianDao(model.Qiandao):
         if mes.get('list'):
             if self.find({'mobile': mobile}).count() > 0:
                 mes['auto'] = True
-                mes['schedule'] = self.find_one({'mobile':mobile})['schedule']
+                mes['schedule'] = self.find_one({'mobile': mobile})['schedule']
             else:
                 mes['auto'] = False
             # while page < pagecount:
@@ -36,7 +49,8 @@ class QianDao(model.Qiandao):
         return urllib2.urlopen(urllib2.Request('http://zhaopin.0fafa.com/work/doudou/shixi/insert_qiandao.php?' + data, headers={"User-Agent": "11.5.78 rv:0.0.1 (iPhone; iPhone OS 9.3.5; zh_CN)"}))
 
     def on(self, mobile):
-        t = threading_auto(mobile, getSchedule())
+        t = threading_auto(mobile)
+        t.setDaemon(True)
         t.start()
 
     def off(self, mobile):
@@ -55,37 +69,29 @@ class QianDao(model.Qiandao):
     def daemon(self):
         for d in self.find():
             self.remove({"mobile": d['mobile']})
-            t = threading_auto(d['mobile'], getSchedule())
+            t = threading_auto(d['mobile'])
+            t.setDaemon(True)
             t.start()
 
-    def valid_today(self):
-        pass
-
-
-def getSchedule():
-    rnum = random.randint(7, 12)
-    if rnum < 10:
-        H = ' 0' + str(rnum)
-    else:
-        H = ' ' + str(rnum)
-    return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + H
 
 class threading_auto(threading.Thread):
-    def __init__(self, mobile, schedule):
+    def __init__(self, mobile):
         threading.Thread.__init__(self)
         self.mobile = mobile
-        self.schedule = schedule
 
     def run(self):
         db = model.Qiandao()
         threadname = threading.currentThread().getName()
-        db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': self.schedule})
         signal[threadname] = True
+        if valid_today(self.mobile):
+            schedule = getSchedule()
+        else:
+            schedule = datetime.datetime.now().strftime("%Y-%m-%d %H")
+        db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': schedule})
         while signal[threadname]:
-            now = datetime.datetime.now().strftime("%Y-%m-%d %H")
-            if now == self.schedule:
+            if datetime.datetime.now().strftime("%Y-%m-%d %H") == schedule:
                 QianDao().insert_qiandao(self.mobile)
                 next_schedule = getSchedule()
-                db.update({'mobile': self.mobile},{'$set':{'schedule': next_schedule}})
-                self.schedule = next_schedule
+                db.update({'mobile': self.mobile}, {'$set': {'schedule': next_schedule}})
+                schedule = next_schedule
             time.sleep(60 * 60)

@@ -15,7 +15,9 @@
     <script>
         $('button').click(function () {
             $.get('/qiandao?op='+ $(this).data('id') +'&mobile='+$(this).data('mobile'),function (res) {
-                location.reload()
+                setTimeout(function(){
+                    location.reload();
+                },100)
             })
         })
     </script>
