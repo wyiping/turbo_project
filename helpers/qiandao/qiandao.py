@@ -70,28 +70,22 @@ def getSchedule():
         H = ' ' + str(rnum)
     return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d") + H
 
-
 class threading_auto(threading.Thread):
-    db = model.Qiandao()
     def __init__(self, mobile, schedule):
         threading.Thread.__init__(self)
         self.mobile = mobile
         self.schedule = schedule
 
     def run(self):
+        db = model.Qiandao()
         threadname = threading.currentThread().getName()
-        self.db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': self.schedule})
+        db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': self.schedule})
         signal[threadname] = True
-        flag = 0
         while signal[threadname]:
             now = datetime.datetime.now().strftime("%Y-%m-%d %H")
             if now == self.schedule:
-                flag = 1
                 QianDao().insert_qiandao(self.mobile)
-            else:
-                if flag == 1:
-                    flag = 0
-                    next_schedule = getSchedule()
-                    self.db.update({'mobile': self.mobile},{'$set':{'schedule': next_schedule}})
-                    self.schedule = next_schedule
+                next_schedule = getSchedule()
+                db.update({'mobile': self.mobile},{'$set':{'schedule': next_schedule}})
+                self.schedule = next_schedule
             time.sleep(60 * 60)
