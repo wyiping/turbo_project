@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>签到</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/aui.2.0.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/stuintern.css" />
+    <style>
+        .aui-bar-nav{background:#e74c3c;}
+    </style>
+</head>
+<body>
+    <header class="aui-bar aui-bar-nav" id="aui-header">
+        <div class="aui-title">我的实习管理</div>
+    </header>
+	<div class="aui-content">
+	    <ul class="aui-timeline" id='dx'>
+	        <li class="aui-time-label">
+	            <span class="aui-bg-info">{{info['list'][0]['addtime'][0:7]}}</span>
+	        </li>
+            {% for i in info['list']%}
+                <li>
+                    <div class="aui-time-label aui-bg-info">{{i['addtime'][9:10]}}</div>
+                    <div class="aui-timeline-item">
+                        <span class="aui-timeline-time"><i class="aui-iconfont aui-icon-time"></i> {{i['addtime'][11:]}}</span>
+                        <h3 class="aui-timeline-header">每日签到</h3>
+                        <div class="aui-timeline-body">{{i['content']}}</div>
+                        <div class="aui-timeline-body">
+                            <i class="aui-iconfont aui-icon-map"></i>{{i['address']}}
+                        </div>
+                    </div>
+                </li>
+            {% end %}
+	    </ul>
+        {% if info['auto']%}
+            <div class="aui-btn aui-btn-danger" style="bottom:4rem;" data-op="off"><i class="aui-iconfont aui-icon-close"></i>关闭</div>
+        {% else %}
+            <div class="aui-btn aui-btn-danger" style="bottom:4rem;" data-op="on">自动签到</div>
+        {% end %}		
+	</div>
+    <script src="../static/js/jquery.js"></script>
+    <script>
+        $('.aui-btn').click(function(){
+            $.get('/qiandao?op='+ $(this).data('op') +'&mobile={{info["list"][0]["mobile"]}}',function (res) {
+                setTimeout(function(){
+                    location.reload();
+                },100)
+            })
+        })
+    </script>
+</body>
+</html>

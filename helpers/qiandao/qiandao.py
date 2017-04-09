@@ -21,24 +21,28 @@ def valid_today(mobile):
         return True
 
 class QianDao(model.Qiandao):
+    def chaxun(self, mobile):
+        rs = self.query(mobile,url='http://zhaopin.0fafa.com/work/doudou/shixi/chaxun.php?mobile=')
+        if rs.get('name'):
+            return rs
+        else:
+            return False
+
     def find_qiandao(self, mobile):
         page = 1
         mes = self.query(mobile)
         pagecount = mes['pageCount']
-        if mes.get('list'):
-            if self.find({'mobile': mobile}).count() > 0:
-                mes['auto'] = True
-                mes['schedule'] = self.find_one({'mobile': mobile})['schedule']
-            else:
-                mes['auto'] = False
-            # while page < pagecount:
-            #     page = page + 1
-            #     res = self.query(mobile, str(page))
-            #     for m in res['list']:
-            #         mes['list'].append(m)
-            return mes
+        if self.find({'mobile': mobile}).count() > 0:
+            mes['auto'] = True
+            mes['schedule'] = self.find_one({'mobile': mobile})['schedule']
         else:
-            return {'error': '号码有误'}
+            mes['auto'] = False
+        # while page < pagecount:
+        #     page = page + 1
+        #     res = self.query(mobile, str(page))
+        #     for m in res['list']:
+        #         mes['list'].append(m)
+        return mes
 
     def query(self, mobile='', page='1', url='http://zhaopin.0fafa.com/work/doudou/shixi/qiandao.php?mobile='):
         return json.loads(urllib2.urlopen(url + mobile+'&page='+page).read())

@@ -11,25 +11,29 @@ logger = turbo.log.getLogger(__file__)
 
 class HomeHandler(BaseHandler):
 
-    def get(self):
-        self.render('index.html')
+    def GET(self):
+        op = self.get_argument('op', None)
+        mobile = self.get_argument('mobile', None)
+        if not op:
+            self.render('index.html')
+        elif op == 'login':
+            if qd.chaxun(mobile):
+                self._data = 'success'
+            else:
+                self.response_error('error')
 
 
 class QiandaoHandler(BaseHandler):
-    def get(self):
+    def GET(self):
         mobile = self.get_argument('mobile', None)
         op = self.get_argument('op', None)
 
-        if op == 'on':
+        if not op:
+            self.render('info.html', info=qd.find_qiandao(mobile))
+        elif op == 'on':
             qd.on(mobile)
         elif op == 'off':
             qd.off(mobile)
-        else:
-            rs = qd.find_qiandao(mobile)
-            if rs.get('error'):
-                self.render('index.html', msg=rs)
-            else:
-                self.render('qiandao.html', qiandao=rs)
 
 
 class AdminHandler(BaseHandler):

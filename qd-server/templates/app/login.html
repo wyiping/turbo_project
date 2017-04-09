@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<link rel="stylesheet" type="text/css" href="../static/css/aui.2.0.css" />
+		<style>
+			.aui-bar-nav .aui-title{min-height:1.4rem; left:4rem; right:4rem;}
+			.aui-bar-nav .aui-btn .aui-iconfont{line-height:1.4rem; font-size:0.7rem; padding-left:0.2rem;}
+			.aui-bar-nav{background-color:#e74c3c;}
+			.aui-bar-tab .aui-active,.aui-bar-nav .aui-bar-btn-item.aui-active{ color:#e74c3c;}
+			.aui-list {
+				font-size: 0.7rem;
+			}
+			.aui-list .aui-list-item i.aui-iconfont {
+				color: #e74c3c;
+				font-size: 0.9rem;
+			}
+			.aui-btn-block.aui-btn-sm {
+				width: 90%;
+				margin: auto;
+				margin-top: 2rem;
+				border-radius: 2rem;
+			}
+			.logo {
+				display: block;
+				width: 6rem;
+				height: 6rem;
+				margin: 1.5rem auto;
+			}
+			.forget {
+				text-align: right;
+				padding: 0 0.75rem;
+				color: #e74c3c;
+			}
+			.aui-btn-danger {
+				background-color: #e74c3c !important;
+			}
+			.aui-btn-danger.aui-active, .aui-btn-danger:active {
+				color: #ffffff !important;
+				background-color: #dd191b !important;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="aui-bar aui-bar-nav" id="aui-header">
+		<a class="aui-btn aui-pull-left" id="back" tapmode> <span class="aui-iconfont aui-icon-left" id="back_span"></span> </a>
+			<div class="aui-title" id="school">
+				<div class="aui-bar aui-bar-btn aui-bar-btn-round" >
+					<div class="aui-bar-btn-item aui-active">
+						登录
+					</div>
+					<div class="aui-bar-btn-item">
+						注册
+					</div>
+				</div>
+			</div>
+			<a class="aui-pull-right aui-btn">
+            跳过
+        </a>
+		</header>
+		<img class="logo" src="../static/images/logo_hong.png"/>
+		<div class="aui-content aui-margin-b-15">
+			<ul class="aui-list aui-list-in">
+				<li class="aui-list-item">
+					<div class="aui-list-item-label-icon">
+						<i class="aui-iconfont aui-icon-mobile"></i>
+					</div>
+					<div class="aui-list-item-inner">
+						<div class="aui-list-item-input">
+							<input id='mobile' type="text"  placeholder="请输入手机号码">
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<p class="forget" >
+			<span>忘记密码？</span>
+		</p>
+		<div class="aui-btn aui-btn-danger aui-btn-block aui-btn-sm" onclick="login()">
+			立即登录
+		</div>
+		<script src="../static/js/jquery.js"></script>
+		<script>
+			function login(){
+				$.get('/qiandao?op=login&mobile='+$('#mobile').val(),function(res){
+					console.log(res)
+				})
+			}
+		</script>
+	</body>
+</html>

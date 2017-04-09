@@ -1,24 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>hello turbo world</title>
-</head>
-<body>
-    {% try %}
-        {% if msg %}
-            {{msg['error']}}
-        {% end %}
-        <form action="/qiandao">
-            <label for="mobile">手机号：<input type="text" name="mobile" id="mobile"></label>
-            <input type="submit" value="查询">
-        </form>
-    {% except %}
-        <form action="/qiandao">
-            <label for="mobile">手机号：<input type="text" name="mobile" id="mobile"></label>
-            <input type="submit" value="查询">
-        </form>
-    {% end %}
-
-</body>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title>校企通</title>
+		<link rel="stylesheet" type="text/css" href="../static/css/api.css"/>
+		<link rel="stylesheet" type="text/css" href="../static/css/animation.css"/>
+		<style>
+			html,body{height:100%; margin:0;padding:0; overflow:hidden;
+			 position: relative;}
+		
+			.main_bg{
+				position: absolute;
+				left: 0;
+				top: 0;
+				width:100%; height:100%; overflow:hidden;
+				background: url(../static/images/bg.jpg) repeat; 
+				background-position:left top; 
+				background-size:180px 270px;
+			}
+			.main_bai{
+				position: absolute;
+				left: 0;
+				top: 0;
+				width:100%; height:100%; overflow:hidden;
+				background-color:rgba(255,255,255,0.92); }
+			.main {
+				width: 100%;
+				overflow: hidden;
+				position: absolute;
+				left: 0;
+				top: 50%;
+				margin-top: -15rem;
+			}
+			.logo {
+				display: block;
+				width: 9rem; height:9rem;
+				margin: 0 auto;
+			}
+			.zi_line {
+				height: 2rem;
+				width: 80%;
+				margin: 0 auto;
+				margin-top: 3rem;
+				margin-bottom: 3rem;
+			}
+			.zi_line b {
+				display: block;
+				float: left;
+				width: 35%;
+				margin: 15px 0;
+				height: 1px;
+				background: url(../static/images/line.png) no-repeat center center;
+				background-size: 100% 1px;
+			}
+			.b_left {
+				float: left;
+			}
+			.b_right {
+				float: right;
+				transform: rotate(180deg);
+				-moz-transform: rotate(180deg);
+				-webkit-transform: rotate(180deg);
+				-o-transform: rotate(180deg);
+			}
+			.zi_line span {
+				float: left;
+				color: #03a9f4;
+				font-size: 14px;
+				line-height: 31px;
+				width: 30%;
+				text-align: center;
+			}
+			.main a {
+				display: block;
+				width: 80%;
+				margin: 2rem auto;
+				color: #fff;
+				font-size: 14px;
+				border-radius: 20px;
+				text-decoration: none;
+				text-align: center;
+				height: 40px;
+				line-height: 40px;
+				background-color:#03a9f4;
+				/*background: url(image/images/index00_btnbg.jpg) repeat-x center center;
+				background-size: 1px 100%;*/
+				overflow: hidden;
+				box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+			}
+			h5{ position: fixed; z-index: 999999; bottom:1rem; left:0; width:100%; text-align:center; color:#03a9f4; font-weight:normal;}
+		</style>
+	</head>
+	<body>
+		<div class="main_bg"></div>
+		<div class="main_bai"></div>
+		<div class="main">
+			<img class="logo" src="../static/images/logo.png"/>
+			<div class="zi_line">
+				<b class="b_left"></b>
+				<span>诚信•沟通</span>
+				<b class="b_right"></b>
+			</div>
+			<a class="qy"  onclick="alert('你找啥？')" href="javascript:">我要找人才</a>
+			<a class="stu" href="../static/login.html">我要找工作</a>
+		</div>
+		<h5>山西维信致远科技有限公司</h5>
+	</body>
 </html>
