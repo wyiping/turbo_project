@@ -16,12 +16,33 @@
     </header>
 	<div class="aui-content">
 	    <ul class="aui-timeline" id='dx'>
+            <li class="aui-time-label">
+                <span class="aui-bg-info">自动签到</span>
+            </li>
+            {% if info['auto'] %}
+                <li>
+                    <div class="aui-time-label aui-bg-info">ON</div>
+                    <div class="aui-timeline-item">
+
+                        <h3 class="aui-timeline-header">时间</h3>
+                        <div class="aui-timeline-body">{{info['schedule'] + ':00'}}</div>
+                    </div>
+                </li>
+            {% else%}
+                <li>
+                    <div class="aui-time-label aui-bg-info">off</div>
+                    <div class="aui-timeline-item">
+                        <h3 class="aui-timeline-header">时间</h3>
+                        <div class="aui-timeline-body">无</div>
+                    </div>
+                </li>
+            {% end %}
 	        <li class="aui-time-label">
 	            <span class="aui-bg-info">{{info['list'][0]['addtime'][0:7]}}</span>
 	        </li>
             {% for i in info['list']%}
                 <li>
-                    <div class="aui-time-label aui-bg-info">{{i['addtime'][9:10]}}</div>
+                    <div class="aui-time-label aui-bg-info">{{i['addtime'][8:10]}}</div>
                     <div class="aui-timeline-item">
                         <span class="aui-timeline-time"><i class="aui-iconfont aui-icon-time"></i> {{i['addtime'][11:]}}</span>
                         <h3 class="aui-timeline-header">每日签到</h3>

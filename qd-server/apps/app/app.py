@@ -18,13 +18,13 @@ class HomeHandler(BaseHandler):
             self.render('index.html')
         elif op == 'login':
             if qd.chaxun(mobile):
-                self._data = 'success'
+                self.response_msg('success',0)
             else:
                 self.response_error('手机号错误！')
 
 
 class QiandaoHandler(BaseHandler):
-    def GET(self):
+    def get(self):
         mobile = self.get_argument('mobile', None)
         op = self.get_argument('op', None)
 

@@ -61,9 +61,6 @@
         </a>
 		</header>
 		<img class="logo" src="images/logo_hong.png"/>
-		<div class="aui-content-padded" style="display:none;">
-			<div class="aui-btn aui-btn-block aui-btn-info"></div>
-		</div>
 		<div class="aui-content aui-margin-b-15">
 			<ul class="aui-list aui-list-in">
 				<li class="aui-list-item">
@@ -85,19 +82,21 @@
 			立即登录
 		</div>
 		<script src="js/jquery.js"></script>
+		<script src="js/aui-toast.js"></script>
 		<script>
+			var toast = new auiToast();
 			function login(){
 				$.get('/?op=login&mobile='+$('#mobile').val(),function(res){
 					if($.parseJSON(res).code != 1){
 						window.location.href = '/qiandao?mobile='+$('#mobile').val();
 					}else if($.parseJSON(res).code == 1){
-						$('.aui-btn-info').html($.parseJSON(res).msg).parent().show(200);
+					    toast.fail({
+							title: $.parseJSON(res).msg,
+							duration:2000
+						});
 					}
 				})
 			}
-			$('.aui-content-padded').click(function(){
-				$(this).hide(200);
-			})
 		</script>
 	</body>
 </html>
