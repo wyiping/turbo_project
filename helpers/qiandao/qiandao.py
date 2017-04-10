@@ -91,11 +91,11 @@ class threading_auto(threading.Thread):
             schedule = getSchedule()
         else:
             schedule = datetime.datetime.now().strftime("%Y-%m-%d %H")
-        db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': schedule})
+        db.insert({'mobile': self.mobile, 'threadname': threadname, 'schedule': schedule + datetime.datetime.now().strftime(":%M")})
         while signal[threadname]:
             if datetime.datetime.now().strftime("%Y-%m-%d %H") == schedule:
                 QianDao().insert_qiandao(self.mobile)
                 next_schedule = getSchedule()
-                db.update({'mobile': self.mobile}, {'$set': {'schedule': next_schedule}})
+                db.update({'mobile': self.mobile}, {'$set': {'schedule': next_schedule + datetime.datetime.now().strftime(":%M")}})
                 schedule = next_schedule
             time.sleep(60 * 60)
