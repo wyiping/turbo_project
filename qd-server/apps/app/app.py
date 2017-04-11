@@ -11,16 +11,16 @@ logger = turbo.log.getLogger(__file__)
 
 class HomeHandler(BaseHandler):
 
-    def GET(self):
+    def get(self):
         op = self.get_argument('op', None)
         mobile = self.get_argument('mobile', None)
+        if op == 'login':
+            if qd.chaxun(mobile):
+                self.wo_json({'code': 0, 'msg': 'success'})
+            else:
+                self.wo_json({'code': 1, 'msg': '手机号错误！'})
         if not op:
             self.render('index.html')
-        elif op == 'login':
-            if qd.chaxun(mobile):
-                self.response_msg('success',0)
-            else:
-                self.response_error('手机号错误！')
 
 
 class QiandaoHandler(BaseHandler):
